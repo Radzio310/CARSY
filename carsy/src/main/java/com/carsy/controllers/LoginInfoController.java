@@ -1,4 +1,4 @@
-package com.carsy.controller;
+package com.carsy.controllers;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.carsy.entity.LoginInfo;
-import com.carsy.repository.LoginInfoRepository;
+import com.carsy.entities.LoginInfo;
+import com.carsy.repositories.LoginInfoRepository;
 
 
 @RestController

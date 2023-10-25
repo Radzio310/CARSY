@@ -1,4 +1,4 @@
-package com.carsy.controller;
+package com.carsy.controllers;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.carsy.entity.CarHistory;
-import com.carsy.repository.CarHistoryRepository;
+import com.carsy.entities.CarHistory;
+import com.carsy.repositories.CarHistoryRepository;
 
 
 @RestController
@@ -21,5 +21,7 @@ public class CarHistoryController
 	{
 		return carHistoryRepository.getAll();
 	}
+	
+	
 	
 }

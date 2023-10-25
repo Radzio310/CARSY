@@ -1,4 +1,4 @@
-package com.carsy.repository;
+package com.carsy.repositories;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.carsy.entity.LoginInfo;
+import com.carsy.entities.LoginInfo;
 
 @Repository
 public class LoginInfoRepository 

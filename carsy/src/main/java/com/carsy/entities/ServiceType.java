@@ -1,4 +1,4 @@
-package com.carsy.entity;
+package com.carsy.entities;
 
 public class ServiceType
 {
