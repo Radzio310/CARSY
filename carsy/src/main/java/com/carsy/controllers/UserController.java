@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.carsy.entities.User;
 import com.carsy.repositories.UserRepository;
@@ -45,6 +46,9 @@ public class UserController {
 		return userRepository.getById(UserID);
 	}
 	
+	
+
+	
 	private static final EmailValidator EMAIL_VALIDATOR = EmailValidator.getInstance();
 	@PostMapping("")
 	public ResponseEntity<String> add(@RequestBody List<User> users) 
@@ -53,8 +57,12 @@ public class UserController {
 	    {
 	    	if (!EMAIL_VALIDATOR.isValid(user.getEmail())) 
 	    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Nieprawidłowy adres e-mail"); // Adres e-mail jest nieprawidłowy
+	    		
 	    }
-	        return ResponseEntity.status(HttpStatus.OK).body(null);
+	   
+	    
+	    	userRepository.save(users);
+	        return ResponseEntity.status(HttpStatus.OK).body("Udało sie");
 	}
 	
 }
