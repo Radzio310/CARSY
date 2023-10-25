@@ -1,19 +1,48 @@
 package com.carsy.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
-@Entity
-public class LoginInfo {
-    @Id
-    private Long userID;
-
-    private String passwordHash;
-    private String salt;
-
-    @OneToOne
+public class LoginInfo
+{
+	private int userID;
+	private String passwordHash;
+	private String salt;
+	
+	@OneToOne
+    @JoinColumn(name = "userID")
     private User user;
+	
+	public int getUserID() {
+        return userID;
+    }
 
-    // Getters and setters
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+	
 }

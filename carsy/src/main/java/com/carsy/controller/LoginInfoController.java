@@ -1,34 +1,31 @@
 package com.carsy.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.carsy.entity.LoginInfo;
-import com.carsy.service.LoginInfoService;
+import com.carsy.repository.LoginInfoRepository;
+
 
 @RestController
-@RequestMapping("/api/login-info")
-public class LoginInfoController {
-
-    private final LoginInfoService loginInfoService;
-
-    @Autowired
-    public LoginInfoController(LoginInfoService loginInfoService) {
-        this.loginInfoService = loginInfoService;
-    }
-
-    @GetMapping("/{userId}")
-    public LoginInfo getLoginInfoByUserId(@PathVariable Long userId) {
-        return loginInfoService.getLoginInfoByUserId(userId).orElse(null);
-    }
-
-    @PostMapping
-    public void addLoginInfo(@RequestBody LoginInfo loginInfo) {
-        loginInfoService.addLoginInfo(loginInfo);
-    }
-
-    @DeleteMapping("/{userId}")
-    public void deleteLoginInfo(@PathVariable Long userId) {
-        loginInfoService.deleteLoginInfo(userId);
-    }
+public class LoginInfoController 
+{
+	@Autowired
+	LoginInfoRepository loginInfoRepository;
+	
+	@GetMapping("/logininfos")
+	public List<LoginInfo> getAll()
+	{
+		return loginInfoRepository.getAll();
+	}
+	
+	@GetMapping("/logininfos/{UserID}")
+	public LoginInfo getById(@PathVariable("UserID") int UserID)
+	{
+		return loginInfoRepository.getById(UserID);
+	}
 }

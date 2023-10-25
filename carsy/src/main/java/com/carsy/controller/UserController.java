@@ -1,41 +1,38 @@
 package com.carsy.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import com.carsy.entity.User;
-import com.carsy.service.UserService;
-
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.carsy.entity.User;
+import com.carsy.repository.UserRepository;
+
+
 @RestController
-@RequestMapping("/api/users")
 public class UserController {
-
-    private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
-    }
-
-    @PostMapping
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-    }
+	
+	@Autowired
+	UserRepository userRepository;
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public int test() {
+		return 1;
+	}
+	
+	@GetMapping("/users")
+	public List<User> getAll()
+	{
+		return userRepository.getAll();
+	}
+	
+	@GetMapping("/users/{UserID}")
+	public User getById(@PathVariable("UserID") int UserID)
+	{
+		return userRepository.getById(UserID);
+	}
 }

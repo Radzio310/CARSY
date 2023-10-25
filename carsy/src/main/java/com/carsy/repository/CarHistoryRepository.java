@@ -1,9 +1,25 @@
 package com.carsy.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
 import com.carsy.entity.CarHistory;
 
-public interface CarHistoryRepository extends JpaRepository<CarHistory, Long> 
+
+@Repository
+public class CarHistoryRepository 
 {
-	//TODO CRUDY
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	
+	public List<CarHistory> getAll() 
+	{
+		return jdbcTemplate.query("SELECT ServiceID, Date, ServiceType, UserID FROM CarHistory", 
+				BeanPropertyRowMapper.newInstance(CarHistory.class));
+	}
+		
 }

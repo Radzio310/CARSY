@@ -1,4 +1,4 @@
-package com.carsy.code;
+package com.carsy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,9 +1,30 @@
 package com.carsy.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
 import com.carsy.entity.LoginInfo;
 
-public interface LoginInfoRepository extends JpaRepository<LoginInfo, Long> 
+@Repository
+public class LoginInfoRepository 
 {
-	//TODO CRUDY
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	
+	public List<LoginInfo> getAll()
+	{
+		return jdbcTemplate.query("SELECT UserID, PasswordHash, Salt FROM LoginInfo", 
+				BeanPropertyRowMapper.newInstance(LoginInfo.class));
+	}
+	
+	public LoginInfo getById(int UserID)
+	{
+		return jdbcTemplate.queryForObject("SELECT UserID, PasswordHash, Salt FROM LoginInfo WHERE UserID = ?", 
+				BeanPropertyRowMapper.newInstance(LoginInfo.class), UserID);
+	}
+	
 }
