@@ -27,12 +27,21 @@ public class UserRepository {
 				BeanPropertyRowMapper.newInstance(User.class), UserID);
 	}
 
-	public int save(List<User> users) {
-		users.forEach(user -> jdbcTemplate
-				.update("INSERT INTO User(Email, FirstName, LastName, DateRegistered) VALUES(?, ?, ?, ?)",
+	public int save(User user) 
+	{
+		return jdbcTemplate.update("INSERT INTO User(Email, FirstName, LastName, DateRegistered) VALUES(?, ?, ?, ?)",
 						user.getEmail(), user.getFirstName(), user.getLastName(), user.getDateRegistered()
-						));
-
-		return 1;
+						);
+	}
+	
+	public int update(User user) 
+	{
+		return jdbcTemplate.update("UPDATE user SET Email=?, FirstName=?, LastName=?, DateRegistered=? WHERE UserID=?",
+				user.getEmail(), user.getFirstName(), user.getLastName(), user.getDateRegistered(), user.getUserID());
+	}
+	
+	public int delete(int UserID)
+	{
+		return jdbcTemplate.update("DELETE FROM User WHERE UserID=?", UserID);
 	}
 }
