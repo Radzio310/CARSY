@@ -1,5 +1,9 @@
 package com.carsy.controllers;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,7 +72,16 @@ public class UserController {
 	public ResponseEntity<String> add(@RequestBody User user) 
 	{
 	    if (!EMAIL_VALIDATOR.isValid(user.getEmail())) 
-	    	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HttpStatus.NOT_FOUND + ": Wrong e-mail address."); // Adres e-mail jest nieprawidłowy
+	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong e-mail address."); // Adres e-mail jest nieprawidłowy
+	    
+	    if(!validateFirstName(user.getFirstName()))
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong first name.");
+	    
+	    if(!validateLastName(user.getLastName()))
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong last name.");
+	    
+//	    if(!validateDate(user.getDateRegistered()))
+//    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong date.");
 	    
 	    userRepository.save(user);
 	    return ResponseEntity.status(HttpStatus.OK).body("Success.");
@@ -90,15 +103,22 @@ public class UserController {
 	    }
 		
 		if (!EMAIL_VALIDATOR.isValid(updatedUser.getEmail())) 
-	    	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(HttpStatus.NOT_FOUND + ": Wrong e-mail address."); // Adres e-mail jest nieprawidłowy
+	    	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong e-mail address."); // Adres e-mail jest nieprawidłowy
 		user.setEmail(updatedUser.getEmail());
+		
+		if(!validateFirstName(updatedUser.getFirstName()))
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong first name.");
 		user.setFirstName(updatedUser.getFirstName());
+		
+		if(!validateLastName(user.getLastName()))
+    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong last name.");
 		user.setLastName(updatedUser.getLastName());
+		
+		
 		user.setDateRegistered(updatedUser.getDateRegistered());
 		userRepository.update(user);
 
 		return ResponseEntity.status(HttpStatus.OK).body("Success.");
-		
 	}
 	
 	@PatchMapping("update/{id}")
@@ -125,9 +145,17 @@ public class UserController {
 			user.setEmail(updatedUser.getEmail());
 		}
 		if(updatedUser.getFirstName() != null) 
+		{
+			if(!validateFirstName(updatedUser.getFirstName()))
+	    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong first name.");
 			user.setFirstName(updatedUser.getFirstName());
+		}
 		if(updatedUser.getLastName() != null) 
+		{
+			if(!validateLastName(user.getLastName()))
+	    		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST + ": Wrong last name.");
 			user.setLastName(updatedUser.getLastName());
+		}
 		if(updatedUser.getDateRegistered() != null) 
 			user.setDateRegistered(updatedUser.getDateRegistered());
 			
@@ -152,4 +180,36 @@ public class UserController {
 	    }
 	}
 	
+	private boolean validateFirstName(String firstName)
+	{
+		return firstName.matches("^[A-ZĄĆĘŁŃÓŚŻŹ][a-zęąćłńóśżź]+$") || firstName.matches("^[A-ZĄĆĘŁŃÓŚŻŹ][a-zęąćłńóśżź]+\\s[A-ĄĆĘŁŃÓŚŻŹ][a-zęąćłńóśżź]+$");
+	}
+	
+	private boolean validateLastName(String lastName)
+	{
+		return lastName.matches("^[A-ZĄĆĘŁŃÓŚŻŹa-zęąćłńóśżź]+([ '-][A-ZĄĆĘŁŃÓŚŻŹa-zęąćłńóśżź]+)*$");  
+	}
+	
+//	private boolean validateDate(Date date) 
+//	{
+//		final String DATE_FORMAT = "yyyy-MM-dd";
+//		
+//        if (date == null) 
+//        {
+//            return false;
+//        }
+//
+//        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+//        sdf.setLenient(false);
+//
+//        try 
+//        {
+//            // Sprawdź, czy sparsowana data jest taka sama jak pierwotna data
+//            return date.equals(sdf.parse(sdf.format(date)));
+//        } 
+//        catch (Exception e) 
+//        {
+//            return false;
+//        }
+//    }
 }

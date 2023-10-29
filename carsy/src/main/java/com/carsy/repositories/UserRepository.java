@@ -57,8 +57,10 @@ public class UserRepository {
 				user.getEmail(), user.getFirstName(), user.getLastName(), user.getDateRegistered(), user.getUserID());
 	}
 	
-	public int delete(int UserID)
+	public int delete(int userID)
 	{
-		return jdbcTemplate.update("DELETE FROM User WHERE UserID=?", UserID);
+		return jdbcTemplate.update("DELETE FROM User WHERE UserID=?", userID);
 	}
+	
+	
 }
