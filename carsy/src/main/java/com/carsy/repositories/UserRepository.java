@@ -44,6 +44,7 @@ public class UserRepository {
         }
 	}
 
+	
 	public int save(User user) 
 	{
 		return jdbcTemplate.update("INSERT INTO User(Email, FirstName, LastName, DateRegistered) VALUES(?, ?, ?, ?)",

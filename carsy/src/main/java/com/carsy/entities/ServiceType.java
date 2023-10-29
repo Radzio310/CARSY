@@ -2,6 +2,7 @@ package com.carsy.entities;
 
 public class ServiceType
 {
+	
 	private int serviceTypeID;
     private String name;
     private double price;
