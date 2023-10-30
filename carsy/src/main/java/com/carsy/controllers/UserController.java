@@ -1,6 +1,5 @@
 package com.carsy.controllers;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +44,7 @@ public class UserController {
 		}
 		else
 		{
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Users not found.");
 		}
 	}
 	

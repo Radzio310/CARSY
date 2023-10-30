@@ -6,8 +6,9 @@ public class CarHistory
 {
 	private int serviceID;
 	private Date date;
-	private String serviceType;
+	private int serviceTypeID;
 	private int userID;
+	private int carID;
 	
 	public int getServiceID() {
         return serviceID;
@@ -25,19 +26,27 @@ public class CarHistory
         this.date = date;
     }
 
-    public String getServiceType() {
-        return serviceType;
+    public int getServiceTypeID() {
+        return serviceTypeID;
     }
 
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
+    public void setServiceTypeID(int serviceTypeID) {
+        this.serviceTypeID = serviceTypeID;
     }
 
-    public int getUser() {
+    public int getUserID() {
         return userID;
     }
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+    
+    public int getCarID() {
+        return carID;
+    }
+    
+    public void setCarID(int carID) {
+        this.carID = carID;
     }
 }
