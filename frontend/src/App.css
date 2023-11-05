@@ -1,38 +1,60 @@
-.App {
-  text-align: center;
+.app {
+   height: 100vh;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   background-color: #1a1a1a;
+   color: #ffd700;
+   font-family: "Arial", sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.header {
+   position: absolute;
+   top: 20px;
+   right: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.btn {
+   background-color: #333;
+   color: #ffd700;
+   border: 1px solid #ffd700;
+   padding: 10px 20px;
+   margin-left: 10px;
+   cursor: pointer;
+   transition: background-color 0.3s ease;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.btn:hover {
+   background-color: #ffd700;
+   color: #333;
 }
 
-.App-link {
-  color: #61dafb;
+.main-content {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.car-silhouette {
+   width: 400px;
+   height: 200px;
+   margin-top: -200px;
+   position: absolute;
+   top: 200px;
+   left: 0px;
+   /* background: url("car.png") no-repeat center center; */
+   background-size: contain;
+}
+
+.menu {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}
+
+.logo {
+   font-size: 5em;
+   font-weight: bold;
+   margin: 20px 0;
 }
