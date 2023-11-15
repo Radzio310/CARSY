@@ -1,5 +1,6 @@
 package com.carsy.config;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,17 +21,21 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService 
 {
 	
-	private static final String SECRET_KEY = "3021766a697e3023315e42266f28237d6f262a4c3e6e706c7227766629";
+	private static final String SECRET_KEY = "NzE0MDY2NzYwMTE2MzA0NzQwNjQzOTExNjU0MjMwNzg=";
 	
 	public String extractUsername(String token) 
 	{
+		System.out.println("W EXTRACTUSERNAME " + token);
 		return extractClaim(token, Claims::getSubject);
 	}
 	
 	public <T> T extractClaim(String token, Function<Claims, T> claimsResolver)
 	{
-		final Claims claims = extractAllClaims(token);
-		return claimsResolver.apply(claims);
+		 System.out.println("W EXTRACTCLAIM " + token);
+		 final Claims claims = extractAllClaims(token);
+		 //System.out.println("W EXTRACTCLAIM 2 " + claimsResolver.apply(claims));
+		 System.out.println("W EXTRACTCLAIM 3 " + token);
+		 return claimsResolver.apply(claims);
 	}
 	
 	public String generateToken(UserDetails userDetails) 
@@ -70,12 +75,19 @@ public class JwtService
 
 	private Claims extractAllClaims(String token)
 	{
-		return Jwts
-				.parserBuilder()
-				.setSigningKey(getSignInKey())
-				.build()
-				.parseClaimsJws(token)
-				.getBody();		
+		System.out.println(token);
+		 try {
+		        return Jwts
+		            .parserBuilder()
+		            .setSigningKey(getSignInKey())
+		            .build()
+		            .parseClaimsJws(token)
+		            .getBody();  
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        System.out.println(token);
+		        throw e;
+		    }	
 	}
 
 	private Key getSignInKey() 
