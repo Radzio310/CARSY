@@ -24,9 +24,9 @@ public class ServiceTypeController {
     public ServiceType addServiceType(@RequestBody ServiceType serviceType) {
         return serviceTypeRepository.save(serviceType);
     }
-    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+
     @GetMapping("/all")
-    @Operation(summary = "Get all service types", description = "Get all service types. Requires MODERATOR or ADMIN role.")
+    @Operation(summary = "Get all service types", description = "Get all service types.")
     public List<ServiceType> getAllServiceTypes() {
         return serviceTypeRepository.findAll();
     }
