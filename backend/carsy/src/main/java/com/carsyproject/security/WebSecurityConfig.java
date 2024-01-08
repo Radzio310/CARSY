@@ -17,6 +17,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.carsyproject.security.jwt.AuthEntryPointJwt;
 import com.carsyproject.security.jwt.AuthTokenFilter;
 import com.carsyproject.security.services.UserDetailsServiceImpl;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 //@EnableWebSecurity
@@ -60,6 +65,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource((corsConfigurationSource())))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
@@ -77,4 +83,18 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://carsy-tau.vercel.app/"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowCredentials(true); // important if credentials are sent
+        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+
 }

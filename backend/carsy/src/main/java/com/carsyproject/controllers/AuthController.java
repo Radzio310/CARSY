@@ -1,5 +1,6 @@
 package com.carsyproject.controllers;
 
+import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +10,13 @@ import java.util.stream.Collectors;
 import com.carsyproject.security.services.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,11 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.carsyproject.models.ERole;
 import com.carsyproject.models.Role;
@@ -62,6 +62,11 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @GetMapping("/check")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public boolean isUserLoggedIn() {
+        return ResponseEntity.ok("logged").hasBody();
+    }
 
     @PostMapping("/signin")
     @Operation(summary = "Sign in", description = "Sign in to the application")
@@ -105,7 +110,6 @@ public class AuthController {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
-
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
@@ -162,7 +166,6 @@ public class AuthController {
         emailService.sendEmail(user.getEmail(), "Complete your registration", emailContent);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-
     }
 
     @PostMapping("/verify")
@@ -188,7 +191,8 @@ public class AuthController {
     @Operation(summary = "Sign out", description = "Sign out from the current session")
     public ResponseEntity<?> logoutUser() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new MessageResponse("You've been signed out!"));
     }
 
