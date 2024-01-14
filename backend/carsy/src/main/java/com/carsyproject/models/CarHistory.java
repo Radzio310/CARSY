@@ -13,7 +13,7 @@ public class CarHistory {
     private Long serviceID;
 
     @NotNull
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     @ManyToOne

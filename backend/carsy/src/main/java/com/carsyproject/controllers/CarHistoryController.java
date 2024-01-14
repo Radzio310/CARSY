@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -93,28 +94,39 @@ public class CarHistoryController {
         return carHistoryRepository.findByCar(car);
     }
 
-//    @GetMapping("/mod/{carId}")
-//    @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-//    public List<CarHistory> getCarHistoryForModerator(@PathVariable Long carId) {
-//        Car car = carRepository.findById(carId)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found"));
-//
-//        // Return the history of the car
-//        return carHistoryRepository.findByCar(car);
-//    }
+    @PostMapping("/appointment")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @Operation(summary = "Making an appointment", description = "Format: yyyy-MM-dd HH. Requires USER, MODERATOR, or ADMIN role.")
+    public CarHistory addAppointment(@RequestBody Map<String, Object> payload) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH");
+        dateFormat.setLenient(false);
+        Date date = dateFormat.parse((String) payload.get("date"));
 
-//    @GetMapping("/{carId}")
-//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-//    public List<CarHistory> getCarHistory(@PathVariable Long carId) {
-//        // Get the logged in user's ID
-//        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Long userId = userDetails.getId();
-//
-//        // Check if the car with the given ID is owned by the logged in user
-//        if (!carHistoryRepository.findByCar_IdAndUserId(carId, userId).isPresent()) {
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to view this car's history");
-//        }
-//
-//        return carHistoryRepository.findByCar_Id(carId);
-//    }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hour < 7 || hour > 17) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Appointments can only be scheduled between 7:00 and 17:00");
+        }
+
+        if (carHistoryRepository.findByDate(date).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date is already taken");
+        }
+
+        Long serviceTypeId = Long.valueOf((Integer) payload.get("serviceTypeId"));
+        Long carId = Long.valueOf((Integer) payload.get("carId"));
+
+        ServiceType serviceType = serviceTypeRepository.findById(serviceTypeId)
+                .orElseThrow(() -> new RuntimeException("Error: ServiceType is not found."));
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new RuntimeException("Error: Car is not found."));
+
+        CarHistory carHistory = new CarHistory();
+        carHistory.setDate(date);
+        carHistory.setServiceType(serviceType);
+        carHistory.setCar(car);
+
+        return carHistoryRepository.save(carHistory);
+    }
+
 }
