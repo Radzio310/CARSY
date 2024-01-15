@@ -1,6 +1,5 @@
 package com.carsyproject.controllers;
 
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +9,6 @@ import java.util.stream.Collectors;
 import com.carsyproject.security.services.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
