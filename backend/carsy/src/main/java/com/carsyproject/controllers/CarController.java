@@ -37,6 +37,12 @@ public class CarController {
     public ResponseEntity<?> addCar(@RequestBody Car car) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findById(userDetails.getId()).orElseThrow(() -> new RuntimeException("Error: User is not found."));
+
+        Car existingCar = carRepository.findByVin(car.getVin());
+        if (existingCar != null) {
+            return new ResponseEntity<>("Error: A car with this VIN already exists.", HttpStatus.BAD_REQUEST);
+        }
+
         car.setUser(user);
         carRepository.save(car);
         return ResponseEntity.ok("Car added successfully.");
