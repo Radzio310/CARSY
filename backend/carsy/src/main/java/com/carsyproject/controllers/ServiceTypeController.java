@@ -23,6 +23,15 @@ public class ServiceTypeController {
     @Operation(summary = "Add a service type", description = "Add a new service type. Requires MODERATOR or ADMIN role.")
     public ServiceType addServiceType(@RequestBody ServiceType serviceType) {
         return serviceTypeRepository.save(serviceType);
+    }    
+    
+    @GetMapping("/my-history")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @Operation(summary = "Get users history", description = "Get all car histories. Requires USER or MODERATOR or ADMIN role.")
+    public List<CarHistory> getMyHistory() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = userDetails.getId();
+        return carHistoryRepository.findByCarUserId(userId);
     }
 
     @GetMapping("/all")

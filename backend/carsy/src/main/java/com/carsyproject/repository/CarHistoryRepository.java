@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CarHistoryRepository extends JpaRepository<CarHistory, Long> {
     List<CarHistory> findByCar(Car car);
-
+    List<CarHistory> findByCarUserId(Long userId);
     Optional<CarHistory> findByDate(Date date);
 
 }
