@@ -19,7 +19,8 @@ Deleting a Service Type: Moderators and administrators can delete a service type
 Technologies  
 Java  
 Spring Boot  
-Maven  
+Maven
+Azure MySQL database
 TypeScript  
 JavaScript  
 React  
